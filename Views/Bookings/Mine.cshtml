@@ -1,0 +1,35 @@
+@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Test Drive Bookings</h1>
+        <p>Track preferred dates, statuses, and appointment progress.</p>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="content-card">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Car</th><th>Requested</th><th>Preferred Date</th><th>Status</th><th>Notes</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <td>@booking.Car?.Brand @booking.Car?.Model</td>
+                        <td>@booking.BookingDate.ToShortDateString()</td>
+                        <td>@booking.PreferredDate.ToShortDateString()</td>
+                        <td>@booking.Status</td>
+                        <td>@booking.Notes</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

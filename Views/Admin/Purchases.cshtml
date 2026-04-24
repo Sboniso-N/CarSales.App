@@ -1,0 +1,57 @@
+@model IEnumerable<Purchase>
+@{
+    ViewData["Title"] = "Manage Purchases";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Purchase Management</h1>
+        <p>Review deposits, confirm payments, and complete car sales.</p>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="content-card">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Reference</th><th>Customer</th><th>Car</th><th>Deposit</th><th>Method</th><th>Payment</th><th>Purchase</th><th></th></tr>
+                </thead>
+                <tbody>
+                @foreach (var purchase in Model)
+                {
+                    var paymentMethod = purchase.Payments.FirstOrDefault()?.PaymentMethod ?? "Not captured";
+                    <tr>
+                        <td>@purchase.SalesReference</td>
+                        <td>@purchase.User?.FullName</td>
+                        <td>@purchase.Car?.Brand @purchase.Car?.Model</td>
+                        <td>R @purchase.AmountPaid.ToString("N0")</td>
+                        <td>@paymentMethod</td>
+                        <td>@purchase.PaymentStatus</td>
+                        <td>@purchase.PurchaseStatus</td>
+                        <td class="text-end">
+                            <form asp-action="UpdatePurchaseStatus" method="post" class="d-flex flex-column gap-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@purchase.PurchaseId" />
+                                <select name="paymentStatus" class="form-select form-select-sm">
+                                    @foreach (var status in Enum.GetValues<PaymentStatus>())
+                                    {
+                                        <option value="@status" selected="@(status == purchase.PaymentStatus ? "selected" : null)">@status</option>
+                                    }
+                                </select>
+                                <select name="status" class="form-select form-select-sm">
+                                    @foreach (var status in Enum.GetValues<PurchaseStatus>())
+                                    {
+                                        <option value="@status" selected="@(status == purchase.PurchaseStatus ? "selected" : null)">@status</option>
+                                    }
+                                </select>
+                                <button class="btn btn-sm btn-dark" type="submit">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

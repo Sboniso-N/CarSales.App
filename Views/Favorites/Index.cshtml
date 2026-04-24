@@ -1,0 +1,24 @@
+@model IEnumerable<Favorite>
+@{
+    ViewData["Title"] = "Favorites";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Saved Cars</h1>
+        <p>Wishlist and shortlist management for returning customers.</p>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var favorite in Model)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <partial name="_CarCard" model="favorite.Car!" />
+                </div>
+            }
+        </div>
+    </div>
+</section>

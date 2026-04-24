@@ -1,0 +1,120 @@
+@model CarListPageViewModel
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Browse Inventory</h1>
+        <p>Search, filter, sort, and paginate dealership stock using real customer-facing criteria.</p>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-3">
+                <form method="get" class="filter-panel sticky-top">
+                    <div class="mb-3">
+                        <label class="form-label">Search</label>
+                        <input name="SearchTerm" value="@Model.Filters.SearchTerm" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Brand</label>
+                        <select name="Brand" class="form-select">
+                            <option value="">All brands</option>
+                            @foreach (var brand in Model.Brands)
+                            {
+                                <option value="@brand" selected="@(brand == Model.Filters.Brand ? "selected" : null)">@brand</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label">Min Price</label>
+                            <input name="MinPrice" value="@Model.Filters.MinPrice" class="form-control" />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Max Price</label>
+                            <input name="MaxPrice" value="@Model.Filters.MaxPrice" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Body Type</label>
+                        <select name="BodyType" asp-items="Html.GetEnumSelectList<BodyType>()" class="form-select">
+                            <option value="">All body types</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Fuel Type</label>
+                        <select name="FuelType" asp-items="Html.GetEnumSelectList<FuelType>()" class="form-select">
+                            <option value="">All fuel types</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Transmission</label>
+                        <select name="Transmission" asp-items="Html.GetEnumSelectList<TransmissionType>()" class="form-select">
+                            <option value="">All transmissions</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Condition</label>
+                        <select name="Condition" asp-items="Html.GetEnumSelectList<CarCondition>()" class="form-select">
+                            <option value="">New / Used</option>
+                        </select>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Sort</label>
+                        <select name="SortOrder" class="form-select">
+                            <option value="newest" selected="@(Model.Filters.SortOrder == "newest" ? "selected" : null)">Newest Added</option>
+                            <option value="price_asc" selected="@(Model.Filters.SortOrder == "price_asc" ? "selected" : null)">Lowest Price</option>
+                            <option value="price_desc" selected="@(Model.Filters.SortOrder == "price_desc" ? "selected" : null)">Highest Price</option>
+                            <option value="popular" selected="@(Model.Filters.SortOrder == "popular" ? "selected" : null)">Most Popular</option>
+                        </select>
+                    </div>
+                    <div class="form-check mt-3">
+                        <input type="checkbox" name="AvailableOnly" value="true" class="form-check-input" @(Model.Filters.AvailableOnly ? "checked" : null) />
+                        <label class="form-check-label">Available only</label>
+                    </div>
+                    <button class="btn btn-accent w-100 mt-4" type="submit">Apply Filters</button>
+                </form>
+            </div>
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">@Model.Cars.TotalCount cars found</h2>
+                    <span class="text-muted">Page @Model.Cars.Page of @Model.Cars.TotalPages</span>
+                </div>
+                <div class="row g-4">
+                    @foreach (var car in Model.Cars.Items)
+                    {
+                        <div class="col-md-6">
+                            <partial name="_CarCard" model="car" />
+                        </div>
+                    }
+                </div>
+
+                <nav class="mt-4">
+                    <ul class="pagination">
+                        @for (var pageNumber = 1; pageNumber <= Model.Cars.TotalPages; pageNumber++)
+                        {
+                            <li class="page-item @(pageNumber == Model.Cars.Page ? "active" : "")">
+                                <a class="page-link" asp-action="Index"
+                                   asp-route-page="@pageNumber"
+                                   asp-route-SearchTerm="@Model.Filters.SearchTerm"
+                                   asp-route-Brand="@Model.Filters.Brand"
+                                   asp-route-MinPrice="@Model.Filters.MinPrice"
+                                   asp-route-MaxPrice="@Model.Filters.MaxPrice"
+                                   asp-route-BodyType="@Model.Filters.BodyType"
+                                   asp-route-FuelType="@Model.Filters.FuelType"
+                                   asp-route-Transmission="@Model.Filters.Transmission"
+                                   asp-route-Condition="@Model.Filters.Condition"
+                                   asp-route-SortOrder="@Model.Filters.SortOrder"
+                                   asp-route-AvailableOnly="@Model.Filters.AvailableOnly">@pageNumber</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>

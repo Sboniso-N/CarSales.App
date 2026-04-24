@@ -1,0 +1,35 @@
+@model IEnumerable<ContactMessage>
+@{
+    ViewData["Title"] = "Messages";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Customer Messages</h1>
+        <p>Lead and support enquiries captured from the contact page.</p>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="content-card">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Name</th><th>Email</th><th>Subject</th><th>Message</th><th>Date</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var message in Model)
+                {
+                    <tr>
+                        <td>@message.Name</td>
+                        <td>@message.Email</td>
+                        <td>@message.Subject</td>
+                        <td>@message.Message</td>
+                        <td>@message.DateSent.ToShortDateString()</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

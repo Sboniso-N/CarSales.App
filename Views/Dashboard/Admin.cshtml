@@ -1,0 +1,82 @@
+@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <p>Monitor inventory, sales, users, bookings, revenue, and customer enquiries from one control center.</p>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-4 mb-4">
+            <div class="col-md-4 col-xl-2"><div class="stat-card"><span>Total Cars</span><strong>@Model.TotalCars</strong></div></div>
+            <div class="col-md-4 col-xl-2"><div class="stat-card"><span>Total Users</span><strong>@Model.TotalUsers</strong></div></div>
+            <div class="col-md-4 col-xl-2"><div class="stat-card"><span>Pending Bookings</span><strong>@Model.PendingBookings</strong></div></div>
+            <div class="col-md-4 col-xl-3"><div class="stat-card"><span>Revenue Summary</span><strong>R @Model.Revenue.ToString("N0")</strong></div></div>
+            <div class="col-md-4 col-xl-3"><div class="stat-card"><span>Pending Purchases</span><strong>@Model.PendingPurchases</strong></div></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-0">Recent Bookings</h3>
+                        <a asp-controller="Admin" asp-action="Bookings">Manage</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var booking in Model.RecentBookings)
+                        {
+                            <li class="list-group-item px-0">@booking.User?.FullName requested @booking.Car?.Brand @booking.Car?.Model for @booking.PreferredDate.ToShortDateString() - @booking.Status</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-0">Recent Purchases</h3>
+                        <a asp-controller="Admin" asp-action="Purchases">Manage</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var purchase in Model.RecentPurchases)
+                        {
+                            <li class="list-group-item px-0">@purchase.User?.FullName - @purchase.Car?.Brand @purchase.Car?.Model - @purchase.PurchaseStatus / @purchase.PaymentStatus</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-0">Inventory Snapshot</h3>
+                        <a asp-controller="Admin" asp-action="Cars">Manage Cars</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var car in Model.LowStockCars)
+                        {
+                            <li class="list-group-item px-0">@car.Brand @car.Model - @car.Status - R @car.Price.ToString("N0")</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="content-card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-0">Customer Messages</h3>
+                        <a asp-controller="Admin" asp-action="Messages">Open Inbox</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var message in Model.RecentMessages)
+                        {
+                            <li class="list-group-item px-0"><strong>@message.Subject</strong> from @message.Name</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

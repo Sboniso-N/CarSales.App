@@ -1,0 +1,47 @@
+@model IEnumerable<Booking>
+@{
+    ViewData["Title"] = "Manage Bookings";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Booking Approvals</h1>
+        <p>Approve, reject, and track customer test drive bookings.</p>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="content-card">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Customer</th><th>Car</th><th>Date</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                @foreach (var booking in Model)
+                {
+                    <tr>
+                        <td>@booking.User?.FullName</td>
+                        <td>@booking.Car?.Brand @booking.Car?.Model</td>
+                        <td>@booking.PreferredDate.ToShortDateString()</td>
+                        <td>@booking.Status</td>
+                        <td class="text-end">
+                            <form asp-action="UpdateBookingStatus" method="post" class="d-inline-flex gap-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@booking.BookingId" />
+                                <select name="status" class="form-select form-select-sm">
+                                    @foreach (var status in Enum.GetValues<BookingStatus>())
+                                    {
+                                        <option value="@status" selected="@(status == booking.Status ? "selected" : null)">@status</option>
+                                    }
+                                </select>
+                                <button class="btn btn-sm btn-dark" type="submit">Update</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

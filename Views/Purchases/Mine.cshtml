@@ -1,0 +1,37 @@
+@model IEnumerable<Purchase>
+@{
+    ViewData["Title"] = "My Purchases";
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Purchase History</h1>
+        <p>View order references, deposit status, and purchase progress.</p>
+    </div>
+</section>
+
+<div class="container pb-5">
+    <div class="content-card">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr><th>Reference</th><th>Car</th><th>Amount Paid</th><th>Method</th><th>Payment</th><th>Purchase Status</th></tr>
+                </thead>
+                <tbody>
+                @foreach (var purchase in Model)
+                {
+                    var paymentMethod = purchase.Payments.FirstOrDefault()?.PaymentMethod ?? "Not captured";
+                    <tr>
+                        <td>@purchase.SalesReference</td>
+                        <td>@purchase.Car?.Brand @purchase.Car?.Model</td>
+                        <td>R @purchase.AmountPaid.ToString("N0")</td>
+                        <td>@paymentMethod</td>
+                        <td>@purchase.PaymentStatus</td>
+                        <td>@purchase.PurchaseStatus</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

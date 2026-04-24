@@ -1,0 +1,83 @@
+@model CustomerDashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var displayName = string.IsNullOrWhiteSpace(Model.User.FullName) ? Model.User.Email : Model.User.FullName;
+}
+
+<section class="page-header">
+    <div class="container">
+        <h1>Customer Dashboard</h1>
+        <p>Welcome back, @displayName. Track your favorites, bookings, purchases, and profile details.</p>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="stat-card"><span>Favorites</span><strong>@Model.Favorites.Count</strong></div>
+                <div class="stat-card"><span>Bookings</span><strong>@Model.Bookings.Count</strong></div>
+                <div class="stat-card"><span>Purchases</span><strong>@Model.Purchases.Count</strong></div>
+            </div>
+            <div class="col-lg-8">
+                <div class="content-card mb-4">
+                    <h3>Profile Management</h3>
+                    <form asp-action="UpdateProfile" method="post" class="row g-3">
+                        @Html.AntiForgeryToken()
+                        <div class="col-md-6">
+                            <label class="form-label">Full Name</label>
+                            <input name="fullName" value="@Model.User.FullName" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Phone Number</label>
+                            <input name="phoneNumber" value="@Model.User.PhoneNumber" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Address</label>
+                            <input name="address" value="@Model.User.Address" class="form-control" />
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-accent" type="submit">Save Profile</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="content-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="mb-0">Saved Cars</h3>
+                        <a asp-controller="Favorites" asp-action="Index">View all</a>
+                    </div>
+                    @if (Model.Favorites.Any())
+                    {
+                        <div class="row g-3">
+                            @foreach (var favorite in Model.Favorites.Take(3))
+                            {
+                                <div class="col-md-4">
+                                    <partial name="_CarCard" model="favorite.Car!" />
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="mb-0">No favorites saved yet.</p>
+                    }
+                </div>
+
+                <div class="content-card">
+                    <h3>Recent Activity</h3>
+                    <ul class="list-group list-group-flush">
+                        @foreach (var booking in Model.Bookings.Take(3))
+                        {
+                            <li class="list-group-item px-0">Test drive for <strong>@booking.Car?.Brand @booking.Car?.Model</strong> on @booking.PreferredDate.ToShortDateString() - @booking.Status</li>
+                        }
+                        @foreach (var purchase in Model.Purchases.Take(3))
+                        {
+                            <li class="list-group-item px-0">Purchase request <strong>@purchase.SalesReference</strong> for @purchase.Car?.Brand @purchase.Car?.Model - @purchase.PurchaseStatus</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

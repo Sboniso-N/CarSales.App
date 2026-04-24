@@ -1,0 +1,144 @@
+@model HomeViewModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section class="hero-section">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <span class="eyebrow">Portfolio-grade car sales platform</span>
+                <h1>Drive your next deal from discovery to delivery.</h1>
+                <p class="lead">Browse premium stock, request test drives, track purchases, and manage dealership operations from one connected MVC system.</p>
+                <div class="d-flex flex-wrap gap-3 mt-4">
+                    <a class="btn btn-accent btn-lg" asp-controller="Cars" asp-action="Index">Browse Inventory</a>
+                    <a class="btn btn-outline-light btn-lg" asp-controller="Contact" asp-action="Index">Speak to Sales</a>
+                </div>
+                <div class="hero-stats mt-5">
+                    <div><strong>@Model.TotalCars</strong><span>Total cars</span></div>
+                    <div><strong>@Model.AvailableCars</strong><span>Available now</span></div>
+                    <div><strong>@Model.SoldCars</strong><span>Sold deals</span></div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-card">
+                    <form asp-controller="Cars" asp-action="Index" method="get" class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label">Search inventory</label>
+                            <input type="text" name="SearchTerm" class="form-control" placeholder="Brand, model, or keyword" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Brand</label>
+                            <select name="Brand" class="form-select">
+                                <option value="">All brands</option>
+                                @foreach (var brand in Model.Brands)
+                                {
+                                    <option value="@brand">@brand</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Sort</label>
+                            <select name="SortOrder" class="form-select">
+                                <option value="newest">Newest</option>
+                                <option value="price_asc">Lowest price</option>
+                                <option value="price_desc">Highest price</option>
+                                <option value="popular">Most popular</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-dark w-100">Find Cars</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-soft">
+    <div class="container">
+        <div class="section-heading">
+            <span class="eyebrow">Featured Cars</span>
+            <h2>High-intent inventory customers ask for first</h2>
+        </div>
+        <div class="row g-4">
+            @foreach (var car in Model.FeaturedCars)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <partial name="_CarCard" model="car" />
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="info-panel">
+                    <span class="eyebrow">Special Offers</span>
+                    <h3>Value-led stock for faster conversions</h3>
+                    <p>Use these listings to showcase promotions, move aging stock, and create urgency in your dealership funnel.</p>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row g-4">
+                    @foreach (var car in Model.SpecialOffers)
+                    {
+                        <div class="col-md-6 col-xl-4">
+                            <partial name="_CarCard" model="car" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-soft">
+    <div class="container">
+        <div class="section-heading">
+            <span class="eyebrow">Why This System Works</span>
+            <h2>Built around real dealership business processes</h2>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4"><div class="feature-card"><h4>Inventory Control</h4><p>Admins manage stock, pricing, availability, and featured listings with full CRUD workflows.</p></div></div>
+            <div class="col-md-4"><div class="feature-card"><h4>Lead Conversion</h4><p>Customers can book test drives, save favorites, and submit purchase requests in a few clicks.</p></div></div>
+            <div class="col-md-4"><div class="feature-card"><h4>Reporting View</h4><p>Dashboards surface pending bookings, recent purchases, messages, and revenue indicators.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="section-heading">
+            <span class="eyebrow">Latest Arrivals</span>
+            <h2>Fresh stock for returning customers</h2>
+        </div>
+        <div class="row g-4">
+            @foreach (var car in Model.LatestCars)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <partial name="_CarCard" model="car" />
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark text-white">
+    <div class="container">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-8">
+                <span class="eyebrow text-warning">Testimonials</span>
+                <h2>“The booking to payment flow made our sales process feel organized for the first time.”</h2>
+                <p class="mb-0">This demo combines customer experience, admin workflows, and clean data relationships into one final-year-ready project.</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a class="btn btn-accent btn-lg" asp-controller="Dashboard" asp-action="Index">Open Dashboard</a>
+            </div>
+        </div>
+    </div>
+</section>

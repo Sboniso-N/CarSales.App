@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MotorMart</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CarSales.Web.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="site-header sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">MotorMart</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Cars" asp-action="Index">Inventory</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contact</a></li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("SalesAgent"))
+                        {
+                            <li class="nav-item"><a class="nav-link" asp-controller="Admin" asp-action="Cars">Admin</a></li>
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        @if (TempData["Success"] is string successMessage)
+        {
+            <div class="container mt-3">
+                <div class="alert alert-success border-0 shadow-sm">@successMessage</div>
+            </div>
+        }
+        @if (TempData["Error"] is string errorMessage)
+        {
+            <div class="container mt-3">
+                <div class="alert alert-danger border-0 shadow-sm">@errorMessage</div>
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="site-footer">
+        <div class="container py-5">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <h5>MotorMart</h5>
+                    <p>Car sales, test drives, financing conversations, and customer relationship management in one modern MVC platform.</p>
+                </div>
+                <div class="col-lg-4">
+                    <h6>Quick Links</h6>
+                    <p><a asp-controller="Cars" asp-action="Index">Browse Cars</a></p>
+                    <p><a asp-controller="Dashboard" asp-action="Index">Customer Dashboard</a></p>
+                    <p><a asp-controller="Contact" asp-action="Index">Support</a></p>
+                </div>
+                <div class="col-lg-4">
+                    <h6>Contact</h6>
+                    <p>12 Rivonia Road, Sandton</p>
+                    <p>+27 11 555 0199</p>
+                    <p>sales@motormart.local</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

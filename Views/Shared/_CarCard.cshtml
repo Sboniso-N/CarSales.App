@@ -1,0 +1,17 @@
+@model Car
+
+<article class="car-card h-100">
+    <img src="@Model.ImageUrl" alt="@($"{Model.Brand} {Model.Model}")" class="car-card-image" />
+    <div class="car-card-body">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+                <span class="car-status">@Model.Status</span>
+                <h3>@Model.Brand @Model.Model</h3>
+            </div>
+            <strong class="price-tag">R @Model.Price.ToString("N0")</strong>
+        </div>
+        <p class="meta">@Model.Year • @Model.Mileage.ToString("N0") km • @Model.FuelType • @Model.Transmission</p>
+        <p>@Model.Description</p>
+        <a class="btn btn-dark w-100" asp-controller="Cars" asp-action="Details" asp-route-id="@Model.CarId">View Details</a>
+    </div>
+</article>
